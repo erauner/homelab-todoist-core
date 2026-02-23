@@ -14,9 +14,8 @@ def evaluate_focus_policy(inp: PolicyInput) -> PolicyDecision:
     cfg = inp.config
     now = inp.now_local
 
-    if inp.source != "manual":
-        if now.hour < cfg.allowed_hour_start or now.hour >= cfg.allowed_hour_end:
-            return PolicyDecision(False, "SKIP", "outside_allowed_window")
+    if inp.source != "manual" and (now.hour < cfg.allowed_hour_start or now.hour >= cfg.allowed_hour_end):
+        return PolicyDecision(False, "SKIP", "outside_allowed_window")
 
     if inp.source == "reminder":
         if inp.reminder_task is None:

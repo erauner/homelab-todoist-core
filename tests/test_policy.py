@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date, datetime
 from zoneinfo import ZoneInfo
 
 from todoist_core.models import PolicyConfig, PolicyInput, TaskContext
