@@ -28,19 +28,20 @@ def build_openclaw_message(decision: PolicyDecision, inp: PolicyInput) -> str:
     if decision.mode == "ACTIVE_FOCUS_PREP_WINDOW":
         focus_id = decision.focus_task_id or "(missing)"
         return header + (
-            "Mode=PREP_MODE (focused task due later today and prep window is open). "
+            "Mode=PREP_MODE (focused task planned start is later today and prep window is open). "
             f"Focused task id: {focus_id}. "
             "Execute in order: 1) td autodoist focus --apply 2) td autodoist tasks --label focus "
             "3) td show <focus_task_id> 4) td next --table. "
             "Concentrate on preparation before start time: extract missing prerequisites, propose a short start checklist, "
             "identify one immediate prep action, and ask one question only if a critical detail is missing. "
-            "Output format: Mode, Status, Prep action now, Start checklist (3 bullets max), Why this reduces startup friction, Definition of done."
+            "Output format: Mode, Status, Prep action now, Start checklist (3 bullets max), Why this reduces startup friction, Definition of done. "
+            "Status wording: use 'planned start' framing; reserve 'deadline risk' wording for actual deadline fields."
         )
 
     if decision.mode in {"ACTIVE_FOCUS_EXEC", "REMINDER_FOCUS"}:
         focus_id = decision.focus_task_id or "(missing)"
         return header + (
-            "Mode=EXEC_MODE (focused task due now/overdue/no due or reminder-fired focused task). "
+            "Mode=EXEC_MODE (focused task at/past planned start, no due, or reminder-fired focused task). "
             f"Focused task id: {focus_id}. "
             "Execute in order: 1) td autodoist focus --apply 2) td autodoist tasks --label focus "
             "3) td show <focus_task_id> 4) td next --table. "
@@ -48,7 +49,8 @@ def build_openclaw_message(decision: PolicyDecision, inp: PolicyInput) -> str:
             'td progress <focus_task_id> "..." --type progress when user provides details, and nudge one concrete next step. '
             "If no progress yet, suggest the smallest actionable start step from existing context. "
             "If no due time/date is present, include one soft question: \"Do you want to set a target time today?\" while keeping execute behavior. "
-            "Output format: Mode, Status, Best next step, Progress checkpoint question, Definition of done."
+            "Output format: Mode, Status, Best next step, Progress checkpoint question, Definition of done. "
+            "Status wording: prefer 'past planned start' over 'overdue' unless discussing explicit deadline risk."
         )
 
     return header + "No action."
